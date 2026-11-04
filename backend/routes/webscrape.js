@@ -1,0 +1,38 @@
+import { Router } from "express";
+import { scrapeRecipes } from "../scraper/index.js";
+
+const MODES = ["flexible", "strict"];
+
+const router = Router();
+
+router.get("/", async (req, res) => {
+  const { flavor, foodtype, texture, mode = "flexible" } = req.query;
+
+  const ingredients = String(req.query.ingredients ?? "")
+    .split(",")
+    .map((ingredient) => ingredient.trim())
+    .filter((ingredient) => ingredient);
+  console.log(ingredients);
+  if (ingredients.length === 0) {
+    return res.status(400).json({ error: "ingredients is required" });
+  }
+  if (!MODES.includes(mode)) {
+    return res.status(400).json({ error: "mode must be strict or flexible" });
+  }
+
+  try {
+    const recipes = await scrapeRecipes({
+      ingredients,
+      flavor,
+      foodtype,
+      texture,
+      mode,
+    });
+    res.json({ count: recipes.length, recipes });
+  } catch (error) {
+    console.error("Scrape failed:", error);
+    res.status(502).json({ error: "Recipe search failed, please try again" });
+  }
+});
+
+export default router;
