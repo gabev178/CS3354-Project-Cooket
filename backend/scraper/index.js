@@ -1,4 +1,6 @@
-// TEMP, Search and extraction are added later.
-export async function scrapeRecipes(params) {
-  return [];
+import { buildQuery, searchRecipes } from "./search.js";
+
+// TEMP, returns result URLs until extraction is added in Part 3.
+export async function scrapeRecipes({ ingredients }) {
+  return searchRecipes(buildQuery(ingredients));
 }
