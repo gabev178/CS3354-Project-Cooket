@@ -9,6 +9,7 @@ router.get("/", async (req, res) => {
   const { flavor, foodtype, texture, mode = "flexible" } = req.query;
 
   const ingredients = String(req.query.ingredients ?? "")
+    .replace(/^\s*\[|\]\s*$/g, "") // Allow ingredients=[egg, bacon]
     .split(",")
     .map((ingredient) => ingredient.trim())
     .filter((ingredient) => ingredient);
