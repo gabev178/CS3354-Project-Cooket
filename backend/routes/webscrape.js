@@ -1,9 +1,26 @@
 import { Router } from "express";
-import { scrapeRecipes } from "../scraper/index.js";
+import { chromium } from "playwright";
+import { buildQuery, searchRecipes } from "../scraper/search.js";
+import { extractRecipe } from "../scraper/extract.js";
+import { rankRecipes } from "../scraper/score.js";
 
 const MODES = ["flexible", "strict"];
 
 const router = Router();
+
+export async function scrapeRecipes(params) {
+  const urls = await searchRecipes(buildQuery(params.ingredients));
+
+  const browser = await chromium.launch();
+  try {
+    const pages = await Promise.all(
+      urls.map((url) => extractRecipe(browser, url)),
+    );
+    return rankRecipes(pages.filter(Boolean), params);
+  } finally {
+    await browser.close();
+  }
+}
 
 router.get("/", async (req, res) => {
   const { flavor, foodtype, texture, mode = "flexible" } = req.query;
