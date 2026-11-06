@@ -1,0 +1,62 @@
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;1,500&display=swap");
+@import "tailwindcss";
+
+@theme {
+  --color-cream: #faf8f1;
+  --color-paper: #fffef9;
+  --color-forest: #31583f;
+  --color-ink: #273b2f;
+  --color-muted: #6f756b;
+  --color-line: #dedfd2;
+  --color-sage: #edf2e6;
+  --font-sans: "DM Sans", sans-serif;
+  --font-display: "Playfair Display", Georgia, serif;
+}
+
+@layer base {
+  body {
+    @apply m-0 bg-cream font-sans text-ink;
+  }
+
+  button,
+  summary {
+    @apply cursor-pointer;
+  }
+
+  button:disabled {
+    @apply cursor-wait opacity-65;
+  }
+
+  button:focus-visible,
+  a:focus-visible,
+  summary:focus-visible {
+    outline: 3px solid #a0b981;
+
+    outline-offset: 4px;
+  }
+
+  input:focus,
+  textarea:focus {
+    outline: 2px solid #74945f;
+
+    outline-offset: 2px;
+  }
+}
+
+@layer components {
+  .field {
+    @apply mt-2 w-full rounded-[9px] border border-[#d4d9ca] bg-white p-3.5 text-sm font-normal text-ink;
+  }
+
+  .eyebrow {
+    @apply text-[10px] font-bold tracking-[2px] text-forest;
+  }
+
+  .help {
+    @apply mt-2 text-[11px] leading-relaxed text-muted;
+  }
+
+  .brand {
+    @apply text-[27px] font-bold tracking-[-1px] no-underline;
+  }
+}
